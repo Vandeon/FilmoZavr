@@ -3,6 +3,7 @@ package com.firstBot.service;
 import java.util.List;
 
 import com.firstBot.entity.User;
+import com.firstBot.model.other.UserStatus;
 
 public interface UserService {
 
@@ -22,5 +23,13 @@ public interface UserService {
 	
 	void addGenreToUser(User user, String incomePayload);
 	
+	void addGenreToUser(User user, List<String> incomePayload);
+	
 	void setUserYears(User user, String incomePayload);
+	
+	void setUserStatus(User user, UserStatus userStatus);
+	
+	void setCommentingFilmId(User user, String commentingFilmId);
+
+	void removeCommentingFilmId(User user);
 }

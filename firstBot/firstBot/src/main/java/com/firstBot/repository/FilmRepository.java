@@ -21,5 +21,11 @@ public interface FilmRepository extends JpaRepository<Film, Integer> {
 			+ "join user_genre on genre.id=user_genre.id_genre join userr on user_genre.id_user=userr.id where userr.messenger_user_id =:userId)",
 			nativeQuery = true)
 	List<Film> getOfferedFilms(@Param("userId") String messengerUserId);
+	
+	@Query(value = "select film.id from film", nativeQuery=true)
+	List<Integer> getAllFilmId();
+
+	@Query(value = "select mark from rate where film_id =:filmId", nativeQuery=true)
+	List<Integer> getRateList(@Param("filmId")int id);
 
 }

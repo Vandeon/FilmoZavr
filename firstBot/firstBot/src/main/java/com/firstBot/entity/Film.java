@@ -36,8 +36,14 @@ public class Film {
 	
 	private int year;
 
+	//fetch=FetchType.EAGER,
 	@OneToMany(mappedBy="film")
 	private List<Comment> comments;
+
+	@OneToMany(mappedBy="film")
+	private List<Rate> rates;
+	
+	private double avgRating;
 	
 	public Film() {}
 	
@@ -118,9 +124,25 @@ public class Film {
 		this.comments = comments;
 	}
 
+	public List<Rate> getRates() {
+		return rates;
+	}
+
+	public void setRates(List<Rate> rates) {
+		this.rates = rates;
+	}
+
+	public double getAvgRating() {
+		return avgRating;
+	}
+
+	public void setAvgRating(double avgRating) {
+		this.avgRating = avgRating;
+	}
+
 	@Override
 	public String toString() {
-		return "Film [id=" + id + ", name=" + name + ", genre=" + genre + ", year=" + year
+		return "Film [id=" + id + ", name=" + name +  ", year=" + year
 				+ "]";
 	}
 

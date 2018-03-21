@@ -11,6 +11,8 @@ public class MessagingIn {
 	private long timestamp;
 	
 	private MessageIn message;
+	
+	private Postback postback;
 
 	public MessagingIn() {}
 	
@@ -52,6 +54,14 @@ public class MessagingIn {
 
 	public void setMessage(MessageIn message) {
 		this.message = message;
+	}
+
+	public Postback getPostback() {
+		return postback;
+	}
+
+	public void setPostback(Postback postback) {
+		this.postback = postback;
 	}
 
 	@Override

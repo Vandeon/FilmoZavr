@@ -9,12 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.firstBot.entity.Genre;
 import com.firstBot.entity.User;
+import com.firstBot.model.other.UserStatus;
 import com.firstBot.repository.UserRepository;
 import com.firstBot.service.GenreService;
 import com.firstBot.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Value("${url.facebook}")
 	String url1;
@@ -24,13 +25,13 @@ public class UserServiceImpl implements UserService{
 
 	@Value("${access}")
 	String access;
-	
+
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@Autowired
 	private GenreService genreService;
-	
+
 	@Override
 	public void save(User user) {
 		userRepository.save(user);
@@ -73,11 +74,26 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public void addGenreToUser(User user, String incomePayload) {
-		Genre possibleGenre = genreService.findOne(Integer.parseInt(incomePayload));
+		Genre genre = genreService.findByName(incomePayload);
 		List<Genre> userGenres = user.getGenres();
-		userGenres.add(possibleGenre);
-		user.setGenres(userGenres);
-		save(user);
+		if (genre != null && !userGenres.contains(genre)) {
+			userGenres.add(genre);
+			user.setGenres(userGenres);
+			save(user);
+		}
+	}
+
+	@Override
+	public void addGenreToUser(User user, List<String> incomePayload) {
+		for (int i = 0; i < incomePayload.size(); i++) {
+			Genre genre = genreService.findByName(incomePayload.get(i));
+			List<Genre> userGenres = user.getGenres();
+			if (genre != null && !userGenres.contains(genre)) {
+				userGenres.add(genre);
+				user.setGenres(userGenres);
+				save(user);
+			}
+		}
 	}
 
 	@Override
@@ -88,5 +104,21 @@ public class UserServiceImpl implements UserService{
 		save(user);
 	}
 
+	@Override
+	public void setUserStatus(User user, UserStatus userStatus) {
+		user.setUserStatus(userStatus);
+		userRepository.save(user);
+	}
+	
+	@Override
+	public void setCommentingFilmId(User user, String commentingFilmId) {
+		user.setCommentingFilmId(commentingFilmId);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void removeCommentingFilmId(User user) {
+		setCommentingFilmId(user, "");
+	}
 
 }

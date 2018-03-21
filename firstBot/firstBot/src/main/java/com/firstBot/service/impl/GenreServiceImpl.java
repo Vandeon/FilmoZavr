@@ -46,5 +46,11 @@ public class GenreServiceImpl implements GenreService{
 		return genreRepository.findByNameNotIn(messengerUserId);
 	}
 
-
+	public boolean ifGenre(String possibleGenre) {
+		if(genreRepository.getAllNames().contains(possibleGenre)) {
+			return true;
+		}
+		return false;
+	}
+	
 }

@@ -4,7 +4,7 @@ import com.firstBot.model.other.ButtonType;
 
 public class ButtonPostback extends Button{
 
-	private ButtonType type;
+	private ButtonType type = ButtonType.postback;
 	
 	private String title;
 	
@@ -12,9 +12,8 @@ public class ButtonPostback extends Button{
 	
 	public ButtonPostback() {}
 	
-	public ButtonPostback(ButtonType type, String title, String payload) {
+	public ButtonPostback(String title, String payload) {
 		super();
-		this.type = type;
 		this.title = title;
 		this.payload = payload;
 	}

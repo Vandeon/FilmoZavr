@@ -21,4 +21,7 @@ public interface FilmService {
 	
 	List<Film> getOfferedFilms(String messengerUserId);
 	
+	List<Integer> getAllFilmId();
+	
+	void updateAvgRaiting(int id);
 }

@@ -12,7 +12,7 @@ public class ContentMaker {
 	
 	public void makeContent(FilmService fs, GenreService gs) {
 		
-		String genres[] = {"Crime","Drama", "Fantasy", "Horror", "Action", "Advanture", "Animation", "Family", "Comedy"};
+		String genres[] = {"Crime","Drama", "Fantasy", "Horror", "Action", "Adventure", "Animation", "Family", "Comedy"};
 		for(int i = 0; i < genres.length; i++) {
 			Genre genre = new Genre();
 			genre.setName(genres[i]);

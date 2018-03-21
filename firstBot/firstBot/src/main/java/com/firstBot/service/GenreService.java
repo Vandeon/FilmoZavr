@@ -17,5 +17,7 @@ public interface GenreService {
 	Genre findByName(String name);
 	
 	List<Genre> findByNameNotIn(String messengerUserId);
+	
+	public boolean ifGenre(String possibleGenre);
 
 }

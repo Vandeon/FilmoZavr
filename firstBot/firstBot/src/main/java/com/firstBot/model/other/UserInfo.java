@@ -6,14 +6,17 @@ public class UserInfo {
 	
 	private String last_name;
 	
+	private String profile_pic;
+	
 	private String id;
 
 	public UserInfo() {}
 
-	public UserInfo(String first_name, String last_name, String id) {
+	public UserInfo(String first_name, String last_name, String profile_pic, String id) {
 		super();
 		this.first_name = first_name;
 		this.last_name = last_name;
+		this.profile_pic = profile_pic;
 		this.id = id;
 	}
 
@@ -39,6 +42,14 @@ public class UserInfo {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getProfile_pic() {
+		return profile_pic;
+	}
+
+	public void setProfile_pic(String profile_pic) {
+		this.profile_pic = profile_pic;
 	}
 
 	@Override

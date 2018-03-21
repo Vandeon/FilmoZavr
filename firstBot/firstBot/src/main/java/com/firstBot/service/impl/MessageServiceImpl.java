@@ -4,12 +4,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.firstBot.entity.User;
 import com.firstBot.model.incomeMessaging.Entry;
 import com.firstBot.model.incomeMessaging.IncommingMessage;
+import com.firstBot.model.incomeMessaging.MessageIn;
 import com.firstBot.model.incomeMessaging.MessagingIn;
 import com.firstBot.model.other.UserInfo;
 import com.firstBot.model.outputMessaging.QuickReply;
@@ -26,58 +28,54 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	private QuickReplyService quickReplyService;
-	
+
 	@Autowired
 	private TextMessageService textMessageService;
-	
+
 	@Value("${access}")
 	String access;
-	
+
 	@Value("${url.bot}")
 	String urlbot;
-	
+
 	@Value("${url.facebook}")
 	String urlFacebook;
-	
+
 	@Value("${url.getusername}")
 	String urlUserName;
-	
+
 	@Value("${secret}")
 	String secret;
 
-	@Value("${qr.cancel.title}")
-	String cancelTitle;
-
-	@Value("${qr.cancel.payload}")
-	String cancelPayload;
-
-	@Value("${qr.done.title}")
-	String doneTitle;
-
-	@Value("${qr.done.payload}")
-	String donePayload;
-	
+	@Async
 	public void getMessage(IncommingMessage message) {
 		List<Entry> entryList = message.getEntry();
 		for (int i = 0; i < entryList.size(); i++) {
 			List<MessagingIn> messagingList = entryList.get(i).getMessaging();
 			for (int j = 0; j < messagingList.size(); j++) {
+				MessagingIn messaging = messagingList.get(j);
 				
-				QuickReply quickReply = messagingList.get(j).getMessage().getQuick_reply();
-				String messengerUserId = messagingList.get(j).getSender().getId();
-
+				String messengerUserId = messaging.getSender().getId();
 				UserInfo userInfo = getUserInfo(messengerUserId);
 				User user = getUser(userInfo);
 				
-				if (quickReply != null) {
-					quickReplyService.doIt(user, quickReply);
-				} else {
-					String messageText = messagingList.get(j).getMessage().getText();
-					textMessageService.doIt(user, messageText);
+				String payload;
+				if (messaging.getMessage() != null) {
+					MessageIn messageIn = messaging.getMessage();
+					QuickReply quickReply = messageIn.getQuick_reply();
+					if (quickReply != null) {
+						payload = quickReply.getPayload();
+						quickReplyService.doIt(user, payload);
+					}else {
+						String messageText = messagingList.get(j).getMessage().getText();
+						textMessageService.doIt(user, messageText);
+					}
+				}else {
+					payload = messaging.getPostback().getPayload();
+					quickReplyService.doIt(user, payload);
 				}
 			}
 		}
-
 	}
 
 	private User getUser(UserInfo userInfo) {
@@ -88,6 +86,7 @@ public class MessageServiceImpl implements MessageService {
 			user.setMessengerUserId(messengerUserId);
 			user.setFirstName(userInfo.getFirst_name());
 			user.setLastName(userInfo.getLast_name());
+			user.setProfile_pic(userInfo.getProfile_pic());
 			userService.save(user);
 		}
 		return user;
@@ -95,7 +94,7 @@ public class MessageServiceImpl implements MessageService {
 
 	private UserInfo getUserInfo(String messengerUserId) {
 		RestTemplate rt = new RestTemplate();
-		UserInfo userInfo = rt.getForObject(urlFacebook+messengerUserId+urlUserName+access, UserInfo.class);
+		UserInfo userInfo = rt.getForObject(urlFacebook + messengerUserId + urlUserName + access, UserInfo.class);
 		return userInfo;
 	}
 

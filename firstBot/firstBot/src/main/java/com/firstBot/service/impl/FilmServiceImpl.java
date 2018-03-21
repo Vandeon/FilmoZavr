@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.firstBot.entity.Film;
 import com.firstBot.entity.Genre;
@@ -52,4 +53,27 @@ public class FilmServiceImpl implements FilmService{
 		return filmRepository.getOfferedFilms(messengerUserId);
 	}
 
+	@Override
+	public List<Integer> getAllFilmId() {
+		return filmRepository.getAllFilmId();
+	}
+
+	@Transactional
+	@Override
+	public void updateAvgRaiting(int id) {
+		Film film = findOne(id);
+		List<Integer> marks = filmRepository.getRateList(id);
+		film.setAvgRating(getAverage(marks));
+	}
+	
+	private double getAverage(List<Integer> marks) {
+		Integer sum = 0;
+		if(!marks.isEmpty()) {
+			for(Integer mark : marks) {
+				sum += mark;
+			}
+			return sum.doubleValue()/marks.size();
+		}
+		return sum;
+	}
 }

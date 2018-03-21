@@ -14,5 +14,8 @@ public interface GenreRepository extends JpaRepository<Genre, Integer>{
 	
 	@Query(value="select * from genre where genre.name not in (select genre.name from userr join user_genre on userr.id = user_genre.id_user join genre on user_genre.id_genre = genre.id where userr.messenger_user_id =:userId)", nativeQuery=true)
 	List <Genre> findByNameNotIn(@Param("userId") String messengerUserId);
+
+	@Query(value="select name from genre", nativeQuery=true)
+	List<String> getAllNames();
 	
 }
