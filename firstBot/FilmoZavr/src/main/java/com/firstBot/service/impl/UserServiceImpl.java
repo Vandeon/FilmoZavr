@@ -98,7 +98,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public void setUserYears(User user, String incomePayload) {
-		String years[] = incomePayload.split("-");
+		String years[] = incomePayload.split("\\D");
 		user.setFromYear(Integer.parseInt(years[0]));
 		user.setToYear(Integer.parseInt(years[1]));
 		save(user);

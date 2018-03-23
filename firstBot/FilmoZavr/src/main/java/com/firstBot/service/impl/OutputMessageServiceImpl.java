@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -140,7 +141,9 @@ public class OutputMessageServiceImpl implements OutputMessageService {
 
 	@Autowired
 	private CommentService commentService;
-
+	
+	 private static final org.apache.log4j.Logger logger = LogManager.getLogger(OutputMessageServiceImpl.class);
+	
 	public AIResponse sendToDialogflow(String text) {
 		AIConfiguration config = new AIConfiguration(clientAccessToken);
 		AIDataService dataService = new AIDataService(config);
@@ -149,7 +152,7 @@ public class OutputMessageServiceImpl implements OutputMessageService {
 			AIResponse response = dataService.request(request);
 			return response;
 		} catch (AIServiceException e) {
-			e.printStackTrace();
+			logger.error(e);
 		}
 		return null;
 	}
@@ -242,6 +245,7 @@ public class OutputMessageServiceImpl implements OutputMessageService {
 			years = (tempYear - Integer.parseInt(yearsInterval) * (k + 1)) + years;
 			list.add(new QuickReply(QuickReplyType.text, years, years, ""));
 		}
+		
 		list.add(new QuickReply(QuickReplyType.text, backTitle, offerGenres, ""));
 		MessageOut mes = new MessageOut("Choose years please.", list);
 		RestTemplate rt = new RestTemplate();
