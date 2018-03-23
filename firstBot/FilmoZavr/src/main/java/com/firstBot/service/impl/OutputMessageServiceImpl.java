@@ -152,7 +152,8 @@ public class OutputMessageServiceImpl implements OutputMessageService {
 			AIResponse response = dataService.request(request);
 			return response;
 		} catch (AIServiceException e) {
-			logger.error(e);
+			e.printStackTrace();
+			logger.info(e);
 		}
 		return null;
 	}

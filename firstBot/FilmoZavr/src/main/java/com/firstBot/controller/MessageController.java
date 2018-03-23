@@ -15,11 +15,20 @@ public class MessageController {
 
 	@Autowired
 	private MessageService messageService;
+//	@Autowired
+//	private FilmService filmService;
+//	@Autowired
+//	private GenreService genreService;
 
 	@PostMapping
 	public ResponseEntity<HttpStatus> getMessage(@RequestBody IncommingMessage message) {
+//		ContentMaker cm = new ContentMaker();
+//		cm.makeContent(filmService, genreService);
 		messageService.getMessage(message);
 		return ResponseEntity.ok().build();
 	}
 
 }
+
+// ContentMaker cm = new ContentMaker();
+// cm.makeContent(filmService, genreService);
